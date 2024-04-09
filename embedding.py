@@ -10,8 +10,8 @@ import re
 
 # 加载PDF文件
 def load_pdf(pdf_file):
-    #pdf_file = open('KOS：2023中国市场招聘趋势.pdf', 'rb')
-    pdf_file = open('test.pdf', 'rb')
+    pdf_file = open('KOS：2023中国市场招聘趋势.pdf', 'rb')
+    #pdf_file = open('test.pdf', 'rb')
     pdf_reader = PyPDF2.PdfReader(pdf_file)
 
     text = ''
