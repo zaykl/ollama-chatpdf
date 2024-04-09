@@ -1,5 +1,6 @@
 import os
 from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_community.embeddings import OllamaEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 import PyPDF2
@@ -9,7 +10,8 @@ import re
 
 # 加载PDF文件
 def load_pdf(pdf_file):
-    pdf_file = open('KOS：2023中国市场招聘趋势.pdf', 'rb')
+    #pdf_file = open('KOS：2023中国市场招聘趋势.pdf', 'rb')
+    pdf_file = open('test.pdf', 'rb')
     pdf_reader = PyPDF2.PdfReader(pdf_file)
 
     text = ''
@@ -61,7 +63,8 @@ def split_paragraph(text, pdf_name, max_length=300):
 def persist_embedding(documents):
     # 将embedding数据持久化到本地磁盘
     persist_directory = 'db'
-    embedding = OpenAIEmbeddings()
+    # embedding = OpenAIEmbeddings()
+    embedding = OllamaEmbeddings()
     vectordb = Chroma.from_documents(documents=documents, embedding=embedding, persist_directory=persist_directory)
     vectordb.persist()
     vectordb = None

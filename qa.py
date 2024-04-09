@@ -1,16 +1,19 @@
 import os
 from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_community.embeddings import OllamaEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.document_loaders import TextLoader
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chat_models import ChatOpenAI
+from langchain_community.llms import Ollama
 from langchain.prompts import PromptTemplate
 
 # os.environ["OPENAI_API_KEY"] = "{your-api-key}"
 
 global retriever
 def load_embedding():
-    embedding = OpenAIEmbeddings()
+    #embedding = OpenAIEmbeddings()
+    embedding = OllamaEmbeddings()
     global retriever
     vectordb = Chroma(persist_directory='db', embedding_function=embedding)
     retriever = vectordb.as_retriever(search_kwargs={"k": 5})
@@ -28,7 +31,9 @@ def prompt(query):
     docs = retriever.get_relevant_documents(query)
     
     # 基于docs来prompt，返回你想要的内容
-    chain = load_qa_chain(ChatOpenAI(temperature=0), chain_type="stuff", prompt=PROMPT)
+    chain = load_qa_chain(Ollama(temperature=0), chain_type="stuff", prompt=PROMPT)
+    #chain = load_qa_chain(ChatOpenAI(temperature=0), chain_type="stuff", prompt=PROMPT)
+
     result = chain({"input_documents": docs, "question": query}, return_only_outputs=True)
     return result['output_text']
 
